@@ -1,0 +1,170 @@
+<h1 class="text-center my-3 mx-auto py-1 bg-secondary text-light h3">
+  IDENTIFICACIÓN DE IDEAS IRRACIONALES
+</h1>
+<p class="mx-3">
+  Este cuestionario tiene por objeto identificar las ideas irracionales que
+  usted tiene y que contribuyen inconscientemente, a incrementar su nivel de
+  estrés y, en consecuencia a vivenciar emociones negativas.
+</p>
+<section>
+  <h2 class="text-center text-decoration-underline h4 my-3">
+    INSTRUCCIONES PARA RESPONDER AL CUESTIONARIO
+  </h2>
+  <ul class="list-group mx-3">
+    <li class="list-group-item">
+      No hay limite de tiempo para contestar al Cuestionario.
+    </li>
+    <li class="list-group-item">
+      No hay respuestas correctas o erróneas. Será útil en la medida que sea
+      sincero/a en sus respuestas.
+    </li>
+    <li class="list-group-item">
+      No es necesario que piense mucho rato en cada item.
+    </li>
+    <li class="list-group-item">
+      Si está más de acuerdo que en desacuerdo con el item señale la casilla SI,
+      si, por el contrario, está más en desacuerdo que de acuerdo, señales la
+      casilla NO.
+    </li>
+    <li class="list-group-item">
+      Asegúrese de que contesta lo que usted realmente piensa, no lo que cree
+      que debería pensar Conteste a todos los items.
+    </li>
+  </ul>
+</section>
+<section class="m-3 p-5 bg-secondary text-light text-center rounded-3">
+  <ng-container *ngIf="!finished; else elseFinishedTemplate">
+    <h3 class="h5 bef bef-h-100px">
+      {{ currentAnswer + 1 }} {{ getCurrentAnswer().question }}
+    </h3>
+    <div class="d-flex flex-wrap justify-content-evenly align-items-center">
+      <button (click)="changeCurrentAnswer('-')" class="btn btn-info px-3">
+        Regresar
+      </button>
+      <button (click)="answerQuestion('si')" class="btn px-5 bef bef-textHover-light fw-bold" [ngClass]="{
+          'btn-success': getCurrentAnswer().answer === 'si',
+          'bef-btnOutline-success bef-bg-gray':
+            getCurrentAnswer().answer !== 'si'
+        }">
+        Si
+      </button>
+      <button (click)="answerQuestion('no')" class="btn bef px-5 bef-textHover-light fw-bold" [ngClass]="{
+          'btn-danger': getCurrentAnswer().answer === 'no',
+          'bef-btnOutline-danger bef-bg-gray':
+            getCurrentAnswer().answer !== 'no'
+        }">
+        No
+      </button>
+    </div>
+  </ng-container>
+  <ng-template #elseFinishedTemplate>
+    <h2 class="text-center text-decoration-underline h4 my-3">
+      PUNTUACIÓN DEL REGISTRO DE CREENCIAS
+    </h2>
+    <ul class="list-group mx-3 bg-secondary">
+      <li class="list-group-item">
+        1) Si el item tiene la letra A y ha contestado Sr, ponga una "cruz" (X)
+        en la columna P.
+      </li>
+      <li class="list-group-item">
+        2) Si el item tiene la letra B y ha contestado "NO", ponga una "cruz'
+        (X) en la columna P.
+      </li>
+      <li class="list-group-item">
+        3) Pase las "cruces" al lugar correspondiente de la siguiente tabla, y
+        sume el número de cruces que aparece en cada columna.
+      </li>
+    </ul>
+    <div class="overflow-scroll my-5">
+      <div class="d-flex justify-content-around bef bef-w-650px mx-auto my-2">
+        <div *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" class="d-flex flex-column flex-wrap bef bef-w-10per">
+          <div class="d-flex flex-wrap justify-content-end">
+            <div class="border border-1 border-dark w-50 bef bef-h-24px">
+              {{ i }}
+            </div>
+            <div *ngFor="let ix of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]" class="d-flex flex-wrap w-100">
+              <div class="border border-1 border-dark w-50">
+                {{ getCell(i, ix) }}
+              </div>
+              <div class="border border-1 border-dark w-50">
+                {{
+                (answers[getCell(i, ix) - 1].answer === "si" &&
+                ptype[getCell(i, ix) - 1] === "A") ||
+                (answers[getCell(i, ix) - 1].answer === "no" &&
+                ptype[getCell(i, ix) - 1] === "B")
+                ? "x"
+                : " "
+                }}
+              </div>
+            </div>
+            <div class="border border-1 border-dark w-50">
+              {{ getPuntuation(i) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3 class="h5 text-center">Resumen de puntuación:</h3>
+    <ul class="list-group mx-3">
+      <li class="list-group-item" *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
+        {{ i + ": " + getPuntuation(i) }}
+      </li>
+    </ul>
+  </ng-template>
+</section>
+<section *ngIf="!checkIfAllEmpty()">
+  <h2 class="text-center text-decoration-underline h4 my-3">Tus respuestas</h2>
+  <ul class="list-group mx-3">
+    <li class="list-group-item d-flex flex-wrap justify-content-between">
+      <span class="bef bef-w-calcSD100per__MIN__7_5remED"> Pregunta </span>
+      <span class="bef bef-w-6rem d-flex flex-wrap">
+        <span class="border-start border-end border-secondary w-50 text-center">
+          Si/No
+        </span>
+        <span class="border-start border-end border-secondary w-50 text-center">
+          P
+        </span>
+      </span>
+    </li>
+    <ng-container *ngFor="let a of answers; let index$ = index">
+      <li *ngIf="a.answer !== ''" class="list-group-item d-flex flex-wrap justify-content-between">
+        <span class="bef bef-w-calcSD100per__MIN__7_5remED">
+          {{ a.index + 1 + " " + a.question }}
+        </span>
+        <span class="bef bef-w-6rem d-flex flex-wrap">
+          <span class="border-start border-end border-secondary w-50 text-center">
+            {{ a.answer }}
+          </span>
+          <span class="border-start border-end border-secondary w-50 text-center">
+            {{ ptype[index$] }}
+          </span>
+        </span>
+      </li>
+    </ng-container>
+  </ul>
+</section>
+<section class="m-3 p-5 bg-secondary text-light text-center rounded-3">
+  <h2 class="text-center h4 my-3">Opciones de la herramienta</h2>
+  <div *ngIf="!finished && checkIfAllEmpty()">
+    <label for="importInput" class="d-block my-3">Importar</label>
+    <textarea id="importInput" class="d-block bef bef-w-95per mx-auto rounded-3 form-control" [(ngModel)]="importInput"
+      placeholder="Coloca aquí respuestas que hayan sido exportadas previamente."></textarea>
+    <button (click)="importAnswers()" class="btn btn-primary my-3">
+      Importar respuestas
+    </button>
+  </div>
+  <button *ngIf="!!finished" (click)="getAnswers()" class="btn btn-success my-3">
+    Exportar respuestas
+  </button>
+  <button *ngIf="!checkIfAllEmpty()" (click)="clearAnswers()" class="btn btn-warning my-3">
+    Limpiar todas las respuestas
+  </button>
+</section>
+<section *ngIf="consola !== ''">
+  <h2 class="text-center text-decoration-underline h4 my-3">
+    Mensajes de la aplicación
+  </h2>
+  <p>
+    {{ consola }}
+  </p>
+</section>
