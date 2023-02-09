@@ -5,8 +5,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+/* Directives */
+import { NgInitDirective } from './directives/ng-init.directive';
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+
+    /* Directives */
+    NgInitDirective,
+  ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, ReactiveFormsModule],
   providers: [],
   bootstrap: [AppComponent],

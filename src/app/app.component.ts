@@ -58,6 +58,7 @@ export class AppComponent implements OnInit {
     if (this.currentAnswer === 0) {
       this.finished = false;
     }
+    this.cssCreate();
   }
 
   answerQuestion(answer: string) {
@@ -70,13 +71,16 @@ export class AppComponent implements OnInit {
     }
   }
 
-  finalizar() {
+  finalizar(imported: boolean = false) {
     this.finished = true;
-    this.getAnswers();
+    this.getAnswers(imported);
   }
 
-  getAnswers() {
+  getAnswers(imported: boolean = false) {
     this.consola = JSON.stringify(this.answers);
+    if (!imported) {
+      this.writeText();
+    }
   }
 
   importAnswers() {
@@ -101,6 +105,10 @@ export class AppComponent implements OnInit {
         }
       }
       this.answers = newAnswers;
+      if (!this.checkIfAllEmpty()) {
+        this.finalizar(true);
+      }
+      this.cssCreate();
     } catch (error) {
       this.consola =
         'Hay un error con las respuestas que quieres importar:\n' + error;
@@ -112,6 +120,8 @@ export class AppComponent implements OnInit {
       a.answer = '';
     }
     this.hasAnswers = false;
+    this.finished = false;
+    this.consola = '';
   }
 
   getCell(i: number, ix: number): number {
@@ -140,6 +150,27 @@ export class AppComponent implements OnInit {
         return a.answer !== '';
       }).length <= 0
     );
+  }
+
+  handleFileSelect(evt: any) {
+    var files = evt.target.files;
+    var f = files[0];
+    var reader = new FileReader();
+
+    reader.readAsText(f);
+    reader.onload = ((f) => {
+      return (e: any) => {
+        this.importInput = e.target.result;
+        this.importAnswers();
+      };
+    })(f);
+  }
+
+  writeText() {
+    const str = JSON.stringify(this.answers);
+    const FileSaver = require('file-saver');
+    const blob = new Blob([str], { type: 'text/plain;charset=utf-8' });
+    FileSaver.saveAs(blob, 'IdeasIrracionales.txt');
   }
 
   cssCreate() {
