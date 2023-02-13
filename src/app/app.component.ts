@@ -77,7 +77,7 @@ export class AppComponent implements OnInit {
   }
 
   getAnswers(imported: boolean = false) {
-    this.consola = 'Ya pueden exportar sus respuestas.';
+    this.consola = 'Ya se pueden exportar sus respuestas.';
     if (!imported) {
       this.writeText();
     }
@@ -163,7 +163,7 @@ export class AppComponent implements OnInit {
   }
 
   writeText() {
-    let answers: any[] = this.answers;
+    let answers: any[] = JSON.parse(JSON.stringify(this.answers));
     for (let a of answers) {
       delete a.question;
     }
