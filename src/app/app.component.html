@@ -35,7 +35,9 @@
 <section class="m-3 bef bef-p-1rem bef-p-sm-3rem bg-secondary text-light text-center rounded-3">
   <ng-container *ngIf="!finished; else elseFinishedTemplate">
     <h3 class="h5 bef bef-h-150px bef-h-sm-100px">
-      {{ currentAnswer + 1 }} {{ getCurrentAnswer().question }}
+      Pregunta {{ currentAnswer + 1 }} de {{ answers.length }} :
+      <br />
+      {{ getCurrentAnswer().question }}
     </h3>
     <div class="d-flex flex-wrap justify-content-evenly align-items-center">
       <button (click)="changeCurrentAnswer('-')" class="order-2 order-sm-0 btn btn-info fw-bold text-light px-3 my-3">
@@ -152,12 +154,6 @@
   <div *ngIf="!finished && checkIfAllEmpty()">
     <label for="subirArchivo" class="d-block my-3">Suba el archivo para importar respuestas.</label>
     <input id="subirArchivo" type="file" class="form-control" (change)="handleFileSelect($event)" />
-    <label for="importInput" class="d-block my-3">Importar</label>
-    <textarea id="importInput" class="d-block bef bef-w-95per mx-auto rounded-3 form-control" [(ngModel)]="importInput"
-      placeholder="Coloca aquí respuestas que hayan sido exportadas previamente."></textarea>
-    <button (click)="importAnswers()" class="btn btn-primary my-3">
-      Importar respuestas
-    </button>
   </div>
   <button *ngIf="!!finished" (click)="getAnswers()" class="btn btn-success my-3">
     Exportar respuestas
@@ -171,9 +167,7 @@
     Mensajes de la aplicación
   </h2>
   <p class="text-break">
-    Aquí se mostrarán los mensajes de la aplicación y si da click en el botón de
-    exportar, aquí estará lo que deberá de copiar y escribir más arriba después
-    para importarlo en esta herramienta.
+    Aquí se mostrarán los mensajes de la aplicación.
   </p>
   <p class="text-break">
     {{ consola }}

@@ -77,7 +77,7 @@ export class AppComponent implements OnInit {
   }
 
   getAnswers(imported: boolean = false) {
-    this.consola = JSON.stringify(this.answers);
+    this.consola = 'Ya pueden exportar sus respuestas.';
     if (!imported) {
       this.writeText();
     }
