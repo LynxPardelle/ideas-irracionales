@@ -90,19 +90,15 @@ export class AppComponent implements OnInit {
       }
       let newAnswers = JSON.parse(this.importInput);
       if (!newAnswers || !newAnswers[0]) {
-        throw new Error('Lo que has escrito no es válido, por favor revisalo.');
+        throw new Error('Lo que has escrito no es válido, por favor revísalo.');
       }
       if (this.answers.length !== newAnswers.length) {
         throw new Error(
-          'No hay la misma cantidad de preguntas que en el formato normal, por favor revisalo.'
+          'No hay la misma cantidad de preguntas que en el formato normal, por favor revísalo.'
         );
       }
       for (let nA of newAnswers) {
-        if (this.answers[nA.index].question !== nA.question) {
-          throw new Error(
-            'Una de las preguntas ha sido manipulada, revisa con atención lo que copiaste.'
-          );
-        }
+        this.answers[nA.index].answer = nA.answer;
       }
       this.answers = newAnswers;
       if (!this.checkIfAllEmpty()) {
@@ -167,7 +163,11 @@ export class AppComponent implements OnInit {
   }
 
   writeText() {
-    const str = JSON.stringify(this.answers);
+    let answers: any[] = this.answers;
+    for (let a of answers) {
+      delete a.question;
+    }
+    const str = JSON.stringify(answers);
     const FileSaver = require('file-saver');
     const blob = new Blob([str], { type: 'text/plain;charset=utf-8' });
     FileSaver.saveAs(blob, 'IdeasIrracionales.txt');
